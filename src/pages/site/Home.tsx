@@ -1,10 +1,10 @@
 import { useEffect } from "react"
-import { api } from "../../libs/axios"
+import { SiteService } from "../../services/SiteService";
 
 export const Home = () => {
     useEffect(() => {
         const teste = async () => {
-            const response = await api.get('/')
+            const response = await SiteService.home()
             console.log(response)
         }
 

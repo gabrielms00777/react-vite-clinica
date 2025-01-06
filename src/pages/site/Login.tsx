@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import { api } from "../../libs/axios";
+import { AuthService } from "../../services/AuthService";
+import { redirect, useNavigate } from "react-router";
 
 type LoginForm = {
     email: string,
@@ -7,21 +9,36 @@ type LoginForm = {
 }
 
 export const Login = () => {
-    const { register, handleSubmit, formState } = useForm<LoginForm>({
+    let navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<LoginForm>({
         defaultValues: {
             email: 'admin@admin',
             password: 'admin'
         }
     })
 
-    // const { errors } = formState
-
-    // console.log(errors)
-
     const onSubmit = async (formData: LoginForm) => {
-        await api.get('/sanctum/csrf-cookie')
-        const response = await api.post('/login', formData)
-        // console.log(response.data);
+
+        // const response = await api.post('/login', formData)
+        const response = await AuthService.login(formData)
+        if (response.details) {
+            setError('email', {
+                message: response.details?.errors?.email[0]
+            })
+            return
+        }
+
+        return navigate(`/${response.data.data.role}`)
+        // console.log(`/${response.data.data.role}`)
+        // console.log(response.data.data.role)
+
+
+        if (response.data?.data?.role === 'admin') {
+            return redirect('/admin')
+        }
+        // } else if
+        //     console.log(response);
+
 
     };
 
@@ -42,6 +59,7 @@ export const Login = () => {
                             },
                         })}
                     />
+                    {errors.email && <span className="text-sm mt-2 text-red-500">{errors.email.message}</span>}
                 </div>
                 <div>
                     <label className="block text-gray-700">Senha</label>

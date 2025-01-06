@@ -15,14 +15,8 @@ export const api = axios.create({
 api.interceptors.request.use(async (config) => {
     const token = document.cookie.split("; ").find(row => row.startsWith("XSRF-TOKEN="));
 
-    if(!token){
-        try {
-            await api.get("/sanctum/csrf-cookie");
-            console.log("XSRF-TOKEN obtido com sucesso.");
-        } catch (error) {
-            console.error("Erro ao obter o XSRF-TOKEN:", error);
-            throw error; 
-        }
+    if(token){
+        config.headers['X-CSRF-TOKEN'] = token
     }
 
     return config
