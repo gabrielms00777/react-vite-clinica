@@ -33,5 +33,14 @@ export const AuthService = {
                 details: axiosError.response?.data
             }
         }
+    },
+    async checkRole(role: string) {
+        try {
+            await useApi('/api/check-role/' + role)
+            return true
+        } catch (error) {
+            return false
+        }
     }
+
 }

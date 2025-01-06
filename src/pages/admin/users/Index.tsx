@@ -1,12 +1,21 @@
 import { NavLink } from "react-router";
 import { User } from "../../../types/User";
+import { useEffect, useState } from "react";
+import { AdminService } from "../../../services/AdminService";
 
 export const UsersIndex = () => {
-    const users: User[] = [
-        { id: 1, name: "João Silva", email: "joao.silva@example.com", role: "admin" },
-        { id: 2, name: "Maria Oliveira", email: "maria.oliveira@example.com", role: "medico" },
-        { id: 3, name: "Carlos Santos", email: "carlos.santos@example.com", role: "recepcionista" },
-    ];
+    const [users, setUsers] = useState<User[]>([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const response = await AdminService.users()
+            setUsers(response.data.data)
+        }
+
+        fetchUsers()
+    }, [])
+
+
     return (
         <div>
             <div className="flex justify-between items-center">
@@ -26,6 +35,8 @@ export const UsersIndex = () => {
                     </tr>
                 </thead>
                 <tbody>
+                    {!users && <tr><td colSpan={5}>Carregando...</td></tr>}
+
                     {users.map((user: User) => (
                         <tr key={user.id} className="text-center">
                             <td className="border border-gray-300 p-2">{user.id}</td>

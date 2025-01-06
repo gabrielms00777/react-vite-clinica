@@ -1,6 +1,19 @@
-import { Outlet, NavLink } from "react-router";
+import { useEffect } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router";
+import { AuthService } from "../../services/AuthService";
 
 export const AdminLayout = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const checkRole = async () => {
+            const response = await AuthService.checkRole('admin')
+            if (!response) {
+                return navigate('/login')
+            }
+        }
+
+        checkRole()
+    }, [])
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
