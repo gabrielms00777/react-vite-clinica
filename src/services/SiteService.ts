@@ -9,7 +9,23 @@ export const SiteService = {
                 data: response.data,
                 details: null
             }
-            
+
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError
+            return {
+                data: null,
+                details: axiosError.response?.data
+            }
+        }
+    },
+    async contactInfos() {
+        try {
+            const response = await useApi('/api/clinic')
+            return {
+                data: response.data,
+                details: null
+            }
+
         } catch (error: unknown) {
             const axiosError = error as AxiosError
             return {

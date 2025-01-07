@@ -1,16 +1,15 @@
 import { useForm } from "react-hook-form";
-import { api } from "../../libs/axios";
 import { AuthService } from "../../services/AuthService";
-import { redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { LoginForm } from "../../types/auth";
+import { useAuthStore } from "../../stores/useAuthStore";
 
-type LoginForm = {
-    email: string,
-    password: string
-}
+
 
 export const Login = () => {
-    let navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, setError } = useForm<LoginForm>({
+    const navigate = useNavigate()
+    const setUser = useAuthStore((state) => state.setUser)
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<LoginForm>({
         defaultValues: {
             email: 'admin@admin',
             password: 'admin'
@@ -18,33 +17,20 @@ export const Login = () => {
     })
 
     const onSubmit = async (formData: LoginForm) => {
-
-        // const response = await api.post('/login', formData)
         const response = await AuthService.login(formData)
         if (response.details) {
             setError('email', {
-                message: response.details?.errors?.email[0]
+                message: (response.details as { errors: any }).errors.email[0]
             })
             return
         }
-
+        setUser(response.data.data)
         return navigate(`/${response.data.data.role}`)
-        // console.log(`/${response.data.data.role}`)
-        // console.log(response.data.data.role)
-
-
-        if (response.data?.data?.role === 'admin') {
-            return redirect('/admin')
-        }
-        // } else if
-        //     console.log(response);
-
-
     };
 
     return (
-        <div className="p-6 max-w-md mx-auto">
-            <h1 className="text-3xl font-bold mb-4">Login</h1>
+        <div className="max-w-md p-6 mx-auto">
+            <h1 className="mb-4 text-3xl font-bold">Login</h1>
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label className="block text-gray-700">Email</label>
@@ -59,7 +45,7 @@ export const Login = () => {
                             },
                         })}
                     />
-                    {errors.email && <span className="text-sm mt-2 text-red-500">{errors.email.message}</span>}
+                    {errors.email && <span className="mt-2 text-sm text-red-500">{errors.email.message}</span>}
                 </div>
                 <div>
                     <label className="block text-gray-700">Senha</label>
@@ -77,9 +63,10 @@ export const Login = () => {
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                    disabled={isSubmitting}
+                    className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
-                    Entrar
+                    {isSubmitting ? "Entrando..." : "Entrar"}
                 </button>
             </form>
         </div>

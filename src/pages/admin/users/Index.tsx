@@ -8,7 +8,7 @@ export const UsersIndex = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await AdminService.users()
+            const response = await AdminService.getUsers()
             setUsers(response.data.data)
         }
 
@@ -18,20 +18,20 @@ export const UsersIndex = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold mb-6">Usuários</h1>
-                <NavLink to="/admin/users/create" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            <div className="flex items-center justify-between">
+                <h1 className="mb-6 text-3xl font-bold">Usuários</h1>
+                <NavLink to="/admin/users/create" className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                     Adicionar Usuario
                 </NavLink>
             </div>
-            <table className="w-full border-collapse border border-gray-300">
+            <table className="w-full border border-collapse border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
-                        <th className="border border-gray-300 p-2">ID</th>
-                        <th className="border border-gray-300 p-2">Nome</th>
-                        <th className="border border-gray-300 p-2">Email</th>
-                        <th className="border border-gray-300 p-2">Role</th>
-                        <th className="border border-gray-300 p-2">Ações</th>
+                        <th className="p-2 border border-gray-300">ID</th>
+                        <th className="p-2 border border-gray-300">Nome</th>
+                        <th className="p-2 border border-gray-300">Email</th>
+                        <th className="p-2 border border-gray-300">Role</th>
+                        <th className="p-2 border border-gray-300">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,15 +39,15 @@ export const UsersIndex = () => {
 
                     {users.map((user: User) => (
                         <tr key={user.id} className="text-center">
-                            <td className="border border-gray-300 p-2">{user.id}</td>
-                            <td className="border border-gray-300 p-2">{user.name}</td>
-                            <td className="border border-gray-300 p-2">{user.email}</td>
-                            <td className="border border-gray-300 p-2">{user.role}</td>
-                            <td className="border border-gray-300 p-2 space-x-2">
-                                <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                            <td className="p-2 border border-gray-300">{user.id}</td>
+                            <td className="p-2 border border-gray-300">{user.name}</td>
+                            <td className="p-2 border border-gray-300">{user.email}</td>
+                            <td className="p-2 border border-gray-300">{user.role}</td>
+                            <td className="p-2 space-x-2 border border-gray-300">
+                                <button className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
                                     Editar
                                 </button>
-                                <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                                <button className="px-2 py-1 text-white bg-red-500 rounded hover:bg-red-600">
                                     Remover
                                 </button>
                             </td>

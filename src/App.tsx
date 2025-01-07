@@ -40,6 +40,7 @@ export default function App() {
         <Route path="profile" element={<Profile />} />
       </Route>
 
+
       {/* Doctor Routes */}
       <Route path="doctor" element={<DoctorLayout />}>
         <Route index element={<DoctorDashboard />} />
@@ -48,12 +49,14 @@ export default function App() {
         <Route path="profile" element={<Profile />} />
       </Route>
 
+
       {/* Receptionist Routes */}
       <Route path="reception" element={<ReceptionistLayout />}>
         <Route index element={<ReceptionistDashboard />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="profile" element={<Profile />} />
       </Route>
+
 
       {/* Shared Routes */}
       <Route path="profile" element={<Profile />} />
